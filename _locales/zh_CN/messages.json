@@ -1,0 +1,11 @@
+{
+  "ext_name": {
+    "message": "幻灯版浏览"
+  },
+  "ext_desc": {
+    "message": "一种以幻灯片方式查看当前页面所有图片的Chrome扩展"
+  },
+  "ext_tooltip": {
+    "message": "打开幻灯片浏览"
+  }
+}

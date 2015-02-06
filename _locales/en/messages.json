@@ -1,0 +1,11 @@
+{
+  "ext_name": {
+    "message": "SlideView"
+  },
+  "ext_desc": {
+    "message": "An extension for viewing current page images in Chrome"
+  },
+  "ext_tooltip": {
+    "message": "Open SlideView"
+  }
+}
