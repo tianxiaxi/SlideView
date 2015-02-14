@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <link ref="stylesheet" type="text/css"  href="../css/common.css"></link>
+    <link rel='stylesheet' type='text/css' href='../css/common.css'></link>
   </head>
 
   <body class='opt_body'>
@@ -18,19 +18,27 @@
 
     <div class='opt_content'>
       <section id='opt_sec_allowedwebsite'>
-        <h2 class='sec_name'>Allowed Website</h2>
+        <h3 class='sec_name'>Allowed Website</h3>
         <div class='sec_body'>
-          <span>section settings</span>
+          <p id='tips'>Allow the SlideView in the following websites:</p>
+          <table id='allowed_website_list'>
+          </table>
+          <span>Domain name / IP Address:</span>
+          <input id='website' placeholder='e.g.  google.com'></input>
+          <button id='AddWebsite'>Add Website</button>
+          <span id='error_tips'></span>
         </div>
       </section>
 
       <section id='opt_sec_flags'>
-        <h2 class='sec_name'>General Options</h2>
+        <h3 class='sec_name'>General Options</h3>
         <div class='sec_body'>
-          <p>
-            <input type='checkbox' id='allow' />
-            <label for='allow'>Allow th</label>
-          </p>
+          <ul class='opt_ul'>
+            <li>
+              <input type='checkbox' class='opt_items' id='allow_thumbnail' />
+              <label for='allow'>Show thumbnail if available</label>
+            </li>
+          </ul>
         </div>
       </section>
     </div>
@@ -38,7 +46,7 @@
     <footer>
       <div class='opt_about'>
       <p>Look forward to your
-      <a href='mailto:tianxiaxi@hotmail.com'>feedback</a>, thank you!
+      <a href='mailto:wayne@zanran.me'>feedback</a>, thank you!
       </p>
     </div>
     </footer>

@@ -6,6 +6,7 @@
 
   "permissions": [
     "tabs",
+    "activeTab",
     "http://*/*",
     "https://*/*",
     "storage"
@@ -19,18 +20,18 @@
 
   "page_action": {
     "default_icon": "images/icon_16.png",
-    "default_title": "__MSG_ext_tooltip_",
-    "default_popup": "views/popup.html"
+    "default_title": "__MSG_ext_tooltip__"
   },
 
   "background": {
-    "scripts": ["js/background.js"]
+    "scripts": ["js/background.js"],
+    "persistent": false
   },
 
   "options_page": "views/options.html",
 
   "default_locale": "en",
 
-  "homepage_url": "https://github.com/tianxiaxi/SlideView",
+  "homepage_url": "http://blog.zanran.me/",
   "author": "wayne"
 }
