@@ -3,6 +3,10 @@
 }
 
 .slide_navigation {
+  margin-bottom: 5px;
+  margin-left: 20px;
+  text-align: left;
+  cursor: pointer;
 }
 
 .slide_body {
@@ -13,8 +17,6 @@
 }
 
 .slide_image {
-  margin-left: auto;
-  margin-right: auto;
   width: 1000px;
   height:560px;
   overflow:auto;
@@ -33,6 +35,10 @@
   overflow:auto;
 }
 
+.img-thumbnail-current {
+  background-color: red;
+}
+
 ul.slide_ul {
   padding-right: 10px;
   list-style:none;
@@ -48,5 +54,11 @@ ul.slide_ul li {
 
 .img-thumbnail:hover {
   transform: scale(0.9);
+}
+
+.slide_nav_close {
+  font-size: 1.3em;
+  text-decoration: underline;
+  color: blue;
 }
 

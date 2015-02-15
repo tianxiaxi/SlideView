@@ -29,6 +29,9 @@ function getImgList() {
   imgType = 'PNG|JPEG|GIF|BMP|TIFF|SVG|TAG|PICT|JPG';
   $('a').each(function() {
     var url = $(this).attr('href');
+    if (!url) {
+      return ;
+    }
     // get url extension name
     var pos = url.lastIndexOf('.');
     if (-1 == pos) return ;
@@ -72,6 +75,13 @@ function getImgList() {
     var title = getTitle($(this));
     if (!title.length) {
       return ;
+    }
+
+    // filter image size
+    var image = new Image();
+    image.src = url;
+    if (image.width <= 64) {
+      return ; // ignore icons
     }
 
     // add object into array
@@ -137,11 +147,12 @@ function insertSlideDomElement(imgList) {
   html += 'role="dialog" tabindex="-1" aria-hidden="true">';
   // slide_view
   html += '<div class="modal-body slide_view">';
-  // slide_view/slide_body
-  html += '<div class="slide_body">';
   // slide_view/slide_body/slide_navigation
   html += '<div class="slide_navigation">';
+  html += '<span class="slide_nav_close">Close</span>';
   html += '</div>';
+  // slide_view/slide_body
+  html += '<div class="slide_body">';
   // slide_view/slide_body/slide_image
   html += '<div class="slide_image">';
   html += '<img class="slide_view_image" alt="' +
@@ -169,8 +180,15 @@ function insertSlideDomElement(imgList) {
     $('.slide_view_image').attr('src', url);
 
     $('.img-thumbnail').each(function() {
-      $(this).css("background-color", "white");
+      $(this).attr('class', 'img-thumbnail');
     })
-    $(this).css("background-color", "red");
+    $(this).attr('class', 'img-thumbnail img-thumbnail-current');
+  })
+
+  $('.slide_nav_close').click(function() {
+    var dlg = $('#chrome_ext_slideview_images_modal_dlg');
+    if (dlg.length) {
+      dlg.modal('hide');
+    }
   })
 }
