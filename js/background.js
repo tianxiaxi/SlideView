@@ -55,6 +55,10 @@ chrome.tabs.onUpdated.addListener(function(tabId) {
 
 // add function for page action
 chrome.pageAction.onClicked.addListener(function(tab) {
-
+  chrome.tabs.insertCSS(null, {file: "bootstrap/css/bootstrap.min.css"});
+  chrome.tabs.insertCSS(null, {file: "css/slide.css"});
+  chrome.tabs.executeScript(null, {file: "js/jquery-2.1.3.min.js"});
+  chrome.tabs.executeScript(null, {file: "bootstrap/js/bootstrap.min.js"});
+  chrome.tabs.executeScript(null, {file: "js/slide.js"});
 });
 
