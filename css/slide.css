@@ -27,6 +27,15 @@
   margin: 0 auto;
 }
 
+.slide_image_title {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 2em;
+  color: #FFD700;
+}
+
 .slide_thumbnail {
   margin-top: 20px;
   float: right;
@@ -59,6 +68,6 @@ ul.slide_ul li {
 .slide_nav_close {
   font-size: 1.3em;
   text-decoration: underline;
-  color: blue;
+  color: red;
 }
 

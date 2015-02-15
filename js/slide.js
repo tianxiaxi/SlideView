@@ -1,6 +1,46 @@
+var oldKeyDown = document.onkeydown;
 $(document).ready(function() {
   showModalDlg();
+  oldKeyDown = document.onkeydown;
+  document.onkeydown = onkeydown;
 })
+
+function onkeydown() {
+  if ($('#chrome_ext_slideview_images_modal_dlg').is(":hidden")) {
+    document.onkeydown = oldKeyDown;
+    return ;
+  }
+  var keyCode = event.keyCode;
+  if (37 == keyCode || 38 == keyCode) {
+    // prev image
+    var cur = $('.img-thumbnail-current');
+    var prev = cur.parent().prev();
+    if (prev.length) {
+      prev = prev.children().first();
+      prev.attr('class', 'img-thumbnail img-thumbnail-current');
+      cur.attr('class', 'img-thumbnail');
+      $('.slide_view_image').attr('src', prev.attr('src'));
+      $('.slide_image_title').text(prev.attr('alt'));
+    }
+  } else if (39 == keyCode || 40 == keyCode){
+    // next image
+    var cur = $('.img-thumbnail-current');
+    var next = cur.parent().next();
+    if (next.length) {
+      next = next.children().first();
+      next.attr('class', 'img-thumbnail img-thumbnail-current');
+      cur.attr('class', 'img-thumbnail');
+      $('.slide_view_image').attr('src', next.attr('src'));
+      $('.slide_image_title').text(next.attr('alt'));
+    }
+  } else if (27 == keyCode) {
+    // exit
+    var dlg = $('#chrome_ext_slideview_images_modal_dlg');
+    if (dlg.length) {
+      dlg.modal('hide');
+    }
+  }
+}
 
 function showModalDlg() {
   var dlg = $('#chrome_ext_slideview_images_modal_dlg');
@@ -147,7 +187,7 @@ function insertSlideDomElement(imgList) {
   html += 'role="dialog" tabindex="-1" aria-hidden="true">';
   // slide_view
   html += '<div class="modal-body slide_view">';
-  // slide_view/slide_body/slide_navigation
+  // slide_view/slide_navigation
   html += '<div class="slide_navigation">';
   html += '<span class="slide_nav_close">Close</span>';
   html += '</div>';
@@ -157,6 +197,8 @@ function insertSlideDomElement(imgList) {
   html += '<div class="slide_image">';
   html += '<img class="slide_view_image" alt="' +
     initImage.title + '" src="' + initImage.url + '">';
+  html += '<span class="slide_image_title">' +
+    initImage.title + '</span>';
   html += '</div>';
   html += '</div>';
   // slide_view/slide_thumbnail
@@ -164,8 +206,13 @@ function insertSlideDomElement(imgList) {
   html += '<ul class="slide_ul">';
   for (i = 0; i < imgList.length; ++i) {
     html += '<li>';
-    html += '<img class="img-thumbnail" width="150" height="150" alt="' +
-      imgList[i].title + '" src="' + imgList[i].url + '" title="' + imgList[i].title + '">';
+    if (imgList[i].url == initImage.url) {
+      html += '<img class="img-thumbnail img-thumbnail-current" ';
+    } else {
+      html += '<img class="img-thumbnail" ';
+    }
+    html += ' width="150" height="150" alt="' + imgList[i].title + '" src="'
+      + imgList[i].url + '" title="' + imgList[i].title + '">';
     html += '</li>';
   }
   html += '</ul';
@@ -177,7 +224,9 @@ function insertSlideDomElement(imgList) {
 
   $('.img-thumbnail').click(function() {
     var url = $(this).attr('src');
+    var title = $(this).attr('alt');
     $('.slide_view_image').attr('src', url);
+    $('.slide_image_title').text(title);
 
     $('.img-thumbnail').each(function() {
       $(this).attr('class', 'img-thumbnail');
