@@ -3,7 +3,7 @@
     "message": "SlideView"
   },
   "ext_desc": {
-    "message": "An extension for viewing current page images in Chrome"
+    "message": "An extension for slide view all current page images in Chrome"
   },
   "ext_tooltip": {
     "message": "Open SlideView"
