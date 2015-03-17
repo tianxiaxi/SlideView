@@ -40,7 +40,7 @@ ul.opt_ul li {
   list-style: none;
 }
 
-input#allow_thumbnail {
+input.opt_items {
   margin-right: 10px;
 }
 

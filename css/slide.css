@@ -1,7 +1,3 @@
-.slide_view {
-  display: block;
-}
-
 .slide_navigation {
   margin-bottom: 5px;
   margin-left: 20px;
@@ -25,6 +21,8 @@
 .slide_view_image {
   display: block;
   margin: 0 auto;
+  background-color: #171717;
+  opacity: 1;
 }
 
 .slide_image_title {
@@ -42,6 +40,7 @@
   margin-right: 30px;
   height: 560px;
   overflow:auto;
+  opacity: 1;
 }
 
 .img-thumbnail-current {
@@ -71,3 +70,8 @@ ul.slide_ul li {
   color: red;
 }
 
+#chrome_ext_slideview_images_modal_dlg
+{
+  background-color: #171717;
+  opacity: 0.9;
+}

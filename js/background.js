@@ -59,6 +59,12 @@ chrome.pageAction.onClicked.addListener(function(tab) {
   chrome.tabs.insertCSS(null, {file: "css/slide.css"});
   chrome.tabs.executeScript(null, {file: "js/jquery-2.1.3.min.js"});
   chrome.tabs.executeScript(null, {file: "bootstrap/js/bootstrap.min.js"});
-  chrome.tabs.executeScript(null, {file: "js/slide.js"});
+  chrome.tabs.executeScript(null, {file: "js/slide.js"}, function() {
+    var items = localStorage.getItem("general_options");
+    if (items) {
+      optlist = JSON.parse(items);
+      chrome.tabs.sendMessage(tab.id, optlist)
+    }
+  });
 });
 

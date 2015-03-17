@@ -20,6 +20,12 @@ $(document).ready(function() {
           return ;
         }
       }
+      // no exist setting found
+      var li = new Object;
+      li.id = $(this).attr('id');
+      li.value = false;
+      optlist.push(li);
+      localStorage.setItem("general_options", JSON.stringify(optlist));
     }
   });
 
