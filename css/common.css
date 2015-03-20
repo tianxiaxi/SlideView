@@ -1,6 +1,8 @@
 body.opt_body {
   padding-top: 10px;
   padding-left: 50px;
+  font-family: "Microsoft YaHei", "微软雅黑",
+             STXihei, "华文细黑", serif;
 }
 
 div.opt_content {

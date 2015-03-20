@@ -1,6 +1,7 @@
 var oldScrollY = undefined;
 var allow_thumbnail = false;
 var ignore_repeat = false;
+var imgList = new Array();
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   for (i=0; i < msg.length; ++i) {
@@ -21,16 +22,36 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   showModalDlg();
 })
 
+function scrollTo() {
+  var height = $('.slide_thumbnail').height();
+  var countImage = imgList.length;
+  var cur = $('.img-thumbnail-current');
+  var curIndex = 1;
+  cur.parent().prevAll().each(function() {
+    curIndex += 1;
+  })
+  if (1 == curIndex) {
+    $('.slide_thumbnail').animate({scrollTop:0},100);
+  } else if (countImage == curIndex){
+    $('.slide_thumbnail').animate({scrollTop:10000},100);
+  } else {
+    var offset = height / countImage * (curIndex + 1);
+    $('.slide_thumbnail').animate({scrollTop:offset},100);
+  }
+}
+
 function prevImage() {
   var cur = $('.img-thumbnail-current');
   var prev = cur.parent().prev();
-  if (prev.length) {
+  if (!prev.length) {
     prev = prev.children().first();
-    prev.attr('class', 'img-thumbnail img-thumbnail-current');
-    cur.attr('class', 'img-thumbnail');
-    $('.slide_view_image').attr('src', prev.attr('src'));
-    $('.slide_image_title').text(prev.attr('alt'));
   }
+  prev.attr('class', 'img-thumbnail img-thumbnail-current');
+  cur.attr('class', 'img-thumbnail');
+  $('.slide_view_image').attr('src', prev.attr('src'));
+  $('.slide_image_title').text(prev.attr('alt'));
+  // set scroll
+  scrollTo();
 }
 
 function nextImage() {
@@ -42,6 +63,8 @@ function nextImage() {
     cur.attr('class', 'img-thumbnail');
     $('.slide_view_image').attr('src', next.attr('src'));
     $('.slide_image_title').text(next.attr('alt'));
+
+    scrollTo();
   }
 }
 
@@ -100,8 +123,6 @@ String.prototype.trim=function(){
 
 // get all images in label a and img in the current page
 function getImgList() {
-  imgList = new Array();
-
   // find label a
   imgType = 'PNG|JPEG|GIF|BMP|TIFF|SVG|TAG|PICT|JPG';
   $('a').each(function() {
@@ -133,9 +154,10 @@ function getImgList() {
 
     // ignore repeat images
     if (ignore_repeat) {
+      baseName = getFileName(url);
       for (i = 0; i < imgList.length; ++i) {
-      var imgTitle = imgList[i].title;
-        if (imgTitle == title) {
+      var imgTitle = imgList[i].baseName;
+        if (imgTitle == baseName) {
           return ;
         }
       }
@@ -158,6 +180,7 @@ function getImgList() {
     var item = new Object;
     item.title = title;
     item.url = url;
+    item.baseName = getFileName(url);
     imgList.push(item);
   })
 
@@ -179,9 +202,10 @@ function getImgList() {
 
     // ignore repeat images
     if (ignore_repeat) {
+      baseName = getFileName(url);
       for (i = 0; i < imgList.length; ++i) {
-      var imgTitle = imgList[i].title;
-        if (imgTitle == title) {
+      var imgTitle = imgList[i].baseName;
+        if (imgTitle == baseName) {
           return ;
         }
       }
@@ -211,10 +235,20 @@ function getImgList() {
     var item = new Object;
     item.title = title;
     item.url = url;
+    item.baseName = getFileName(url);
     imgList.push(item);
   })
 
   return imgList;
+}
+
+function getFileName(url) {
+  var baseName = url;
+  var pos = url.lastIndexOf('/');
+  if (-1 != pos) {
+    baseName = url.substr(pos+1);
+  }
+  return baseName;
 }
 
 function getTitle(obj) {
@@ -269,7 +303,7 @@ function insertSlideDomElement(imgList) {
   var html = '<div class="modal fade" id="chrome_ext_slideview_images_modal_dlg" ';
   html += 'role="dialog" tabindex="-1" aria-hidden="true">';
   // slide_view
-  html += '<div class="modal-body slide_view">';
+  html += '<div class="slide_view">';
   // slide_view/slide_navigation
   html += '<div class="slide_navigation">';
   html += '<span class="slide_nav_close">Close</span>';
@@ -282,6 +316,9 @@ function insertSlideDomElement(imgList) {
     initImage.title + '" src="' + initImage.url + '">';
   html += '<span class="slide_image_title">' +
     initImage.title + '</span>';
+  html += '<div class="slide_viewsource">';
+  html += '<a target="_blank" href="' + initImage.url + '">View Source</a>';
+  html += '</div>';
   html += '</div>';
   html += '</div>';
   // slide_view/slide_thumbnail
@@ -302,6 +339,7 @@ function insertSlideDomElement(imgList) {
   html += '</div>';
   html += '</div>';
   html += '</div>';
+  html += '</div>';
 
   $('body').prepend(html);
 
@@ -310,11 +348,13 @@ function insertSlideDomElement(imgList) {
     var title = $(this).attr('alt');
     $('.slide_view_image').attr('src', url);
     $('.slide_image_title').text(title);
+    $('.slide_viewsource a').attr('href', url);
 
     $('.img-thumbnail').each(function() {
       $(this).attr('class', 'img-thumbnail');
     })
     $(this).attr('class', 'img-thumbnail img-thumbnail-current');
+    scrollTo();
   })
 
   $('.slide_nav_close').click(function() {
@@ -322,5 +362,12 @@ function insertSlideDomElement(imgList) {
     if (dlg.length) {
       dlg.modal('hide');
     }
+  })
+
+  $('.slide_view_image').mouseenter(function() {
+    $('.slide_viewsource').css('display', 'block');
+  })
+  $('.slide_view_image').mouseleave(function() {
+    //$('.slide_viewsource').css('display', 'none');
   })
 }

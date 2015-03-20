@@ -1,5 +1,26 @@
+function detectLanguage() {
+  var href = window.location.href;
+  var lang = chrome.i18n.getUILanguage();
+  if (!lang) {
+    return ;
+  }
+  pos = lang.indexOf('-');
+  if (-1 != pos) {
+    lang = lang.substr(0, pos);
+  }
+  if ('zh' == lang) {
+    tab_url = chrome.extension.getURL('views/options-cn.html');
+    if (tab_url != href) {
+      window.location.href = tab_url;
+    }
+  }
+  //console.log(lang);
+}
+
 $(document).ready(function() {
   document.title = "SlideView Options";
+
+  detectLanguage();
 
   LoadAllowedWebsite();
 

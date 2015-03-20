@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel='stylesheet' type='text/css' href='../css/common.css'></link>
+  </head>
+
+  <body class='opt_body'>
+    <header>
+      <div class='opt_title'>
+        <h1>SlideView设置</h1>
+      </div>
+    </header>
+      <div class='app_info'>
+        <p>SlideView是一个基于Chrome的扩展, 它收集当前页面所有的图片信息, 并以幻灯片
+        的方式展现给用户. 在使用SlideView之前,需要添加许可SlideView访问的网站信息.</p>
+        <p>您可以通过 <em><a href='https://github.com/tianxiaxi/SlideView'>
+        https://github.com/tianxiaxi/SlideView</a></em> 获取最新的信息及源代码!</p>
+      </div>
+
+    <div class='opt_content'>
+      <section id='opt_sec_allowedwebsite'>
+        <h3 class='sec_name'>许可网站</h3>
+        <div class='sec_body'>
+          <p id='tips'>许可SlideView访问的网站列表:</p>
+          <table id='allowed_website_list'>
+          </table>
+          <span>域名/IP地址:</span>
+          <input id='website' placeholder='e.g.  google.com'></input>
+          <button id='AddWebsite'>添加网站</button>
+          <span id='error_tips'></span>
+        </div>
+      </section>
+
+      <section id='opt_sec_flags'>
+        <h3 class='sec_name'>通用设置</h3>
+        <div class='sec_body'>
+          <ul class='opt_ul'>
+            <li>
+              <input type='checkbox' class='opt_items' id='allow_thumbnail' />
+              <label for='allow_thumbnail'>允许显示缩略图</label>
+            </li>
+            <li>
+              <input type='checkbox' class='opt_items' id='ignore_repeat' />
+              <label for='ignore_repeat'>忽略重复的图片</label>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div class='opt_about'>
+      <p>Look forward to your
+      <a href='mailto:wayne@zanran.me'>feedback</a>, thank you!
+      </p>
+    </div>
+    </footer>
+  </body>
+
+  <script src='../js/jquery-2.1.3.min.js'></script>
+  <script src="../js/options.js"></script>
+</html>
