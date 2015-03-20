@@ -1,7 +1,6 @@
 var oldScrollY = undefined;
 var allow_thumbnail = false;
 var ignore_repeat = false;
-var imgList = new Array();
 
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   for (i=0; i < msg.length; ++i) {
@@ -22,50 +21,61 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   showModalDlg();
 })
 
-function scrollTo() {
-  var height = $('.slide_thumbnail').height();
-  var countImage = imgList.length;
-  var cur = $('.img-thumbnail-current');
-  var curIndex = 1;
-  cur.parent().prevAll().each(function() {
-    curIndex += 1;
+function scrollTo(index) {
+  var imageCount = 0;
+  $('.img-thumbnail').each(function() {
+    imageCount += 1;
   })
-  if (1 == curIndex) {
+  if (0 == index) {
     $('.slide_thumbnail').animate({scrollTop:0},100);
-  } else if (countImage == curIndex){
+  } else if (imageCount <= index+1){
     $('.slide_thumbnail').animate({scrollTop:10000},100);
   } else {
-    var offset = height / countImage * (curIndex + 1);
+    var height = $('.slide_thumbnail').height();
+    var offset = height / imageCount * (index + 1);
     $('.slide_thumbnail').animate({scrollTop:offset},100);
   }
 }
 
 function prevImage() {
-  var cur = $('.img-thumbnail-current');
-  var prev = cur.parent().prev();
-  if (!prev.length) {
-    prev = prev.children().first();
+  var curImage = $('.img-thumbnail-current');
+  var curIndex = parseInt(curImage.attr('index'));
+  var prevIndex = curIndex - 1;
+  if (prevIndex < 0) {
+    return ;
   }
-  prev.attr('class', 'img-thumbnail img-thumbnail-current');
-  cur.attr('class', 'img-thumbnail');
-  $('.slide_view_image').attr('src', prev.attr('src'));
-  $('.slide_image_title').text(prev.attr('alt'));
-  // set scroll
-  scrollTo();
+  showImage(prevIndex);
 }
 
 function nextImage() {
-  var cur = $('.img-thumbnail-current');
-  var next = cur.parent().next();
-  if (next.length) {
-    next = next.children().first();
-    next.attr('class', 'img-thumbnail img-thumbnail-current');
-    cur.attr('class', 'img-thumbnail');
-    $('.slide_view_image').attr('src', next.attr('src'));
-    $('.slide_image_title').text(next.attr('alt'));
-
-    scrollTo();
+  var curImage = $('.img-thumbnail-current');
+  var curIndex = parseInt(curImage.attr('index'));
+  var nextIndex = curIndex + 1;
+  var maxIndex = 0;
+  $('.img-thumbnail').each(function() {
+    maxIndex += 1;
+  })
+  if (nextIndex >= maxIndex) {
+    return ;
   }
+  showImage(nextIndex);
+}
+
+function showImage(index) {
+  $('.img-thumbnail').each(function() {
+    $(this).removeClass('img-thumbnail-current');
+    var curIndex = $(this).attr('index');
+    if (index == curIndex) {
+      $(this).addClass('img-thumbnail-current');
+
+      var url = $(this).attr('src');
+      var title = $(this).attr('alt');
+      $('.slide_view_image').attr('src', url);
+      $('.slide_image_title').text(title);
+      $('.slide_viewsource a').attr('href', url);
+    }
+  })
+  scrollTo(index);
 }
 
 function onkeydown() {
@@ -123,6 +133,7 @@ String.prototype.trim=function(){
 
 // get all images in label a and img in the current page
 function getImgList() {
+  var imgList = new Array();
   // find label a
   imgType = 'PNG|JPEG|GIF|BMP|TIFF|SVG|TAG|PICT|JPG';
   $('a').each(function() {
@@ -308,19 +319,6 @@ function insertSlideDomElement(imgList) {
   html += '<div class="slide_navigation">';
   html += '<span class="slide_nav_close">Close</span>';
   html += '</div>';
-  // slide_view/slide_body
-  html += '<div class="slide_body">';
-  // slide_view/slide_body/slide_image
-  html += '<div class="slide_image">';
-  html += '<img class="slide_view_image" alt="' +
-    initImage.title + '" src="' + initImage.url + '">';
-  html += '<span class="slide_image_title">' +
-    initImage.title + '</span>';
-  html += '<div class="slide_viewsource">';
-  html += '<a target="_blank" href="' + initImage.url + '">View Source</a>';
-  html += '</div>';
-  html += '</div>';
-  html += '</div>';
   // slide_view/slide_thumbnail
   html += '<div class="slide_thumbnail">';
   html += '<ul class="slide_ul">';
@@ -332,10 +330,23 @@ function insertSlideDomElement(imgList) {
       html += '<img class="img-thumbnail" ';
     }
     html += ' width="150" height="150" alt="' + imgList[i].title + '" src="'
-      + imgList[i].url + '" title="' + imgList[i].title + '">';
+      + imgList[i].url + '" index="' + i + '">';
     html += '</li>';
   }
-  html += '</ul';
+  html += '</ul>';
+  html += '</div>';
+  // slide_view/slide_body
+  html += '<div class="slide_body">';
+  html += '<div class="slide_image">';
+  html += '<div class="slide_viewsource">';
+  html += '<a target="_blank" href="' + initImage.url + '">View Source</a>';
+  html += '</div>';
+  html += '<img class="slide_view_image" alt="' +
+    initImage.title + '" src="' + initImage.url + '">';
+  html += '</div>';
+  html += '<div class="slide_image_title">';
+  html += '<span class="title_text">' +
+    initImage.title + '</span>';
   html += '</div>';
   html += '</div>';
   html += '</div>';
@@ -344,17 +355,8 @@ function insertSlideDomElement(imgList) {
   $('body').prepend(html);
 
   $('.img-thumbnail').click(function() {
-    var url = $(this).attr('src');
-    var title = $(this).attr('alt');
-    $('.slide_view_image').attr('src', url);
-    $('.slide_image_title').text(title);
-    $('.slide_viewsource a').attr('href', url);
-
-    $('.img-thumbnail').each(function() {
-      $(this).attr('class', 'img-thumbnail');
-    })
-    $(this).attr('class', 'img-thumbnail img-thumbnail-current');
-    scrollTo();
+    var index = $(this).attr('index');
+    showImage(index);
   })
 
   $('.slide_nav_close').click(function() {
@@ -365,9 +367,9 @@ function insertSlideDomElement(imgList) {
   })
 
   $('.slide_view_image').mouseenter(function() {
-    $('.slide_viewsource').css('display', 'block');
+    $('.slide_viewsource').show();
   })
   $('.slide_view_image').mouseleave(function() {
-    //$('.slide_viewsource').css('display', 'none');
+    //$('.slide_viewsource').hide();
   })
 }

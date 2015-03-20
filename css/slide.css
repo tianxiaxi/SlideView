@@ -3,6 +3,7 @@ div#chrome_ext_slideview_images_modal_dlg
   position: fixed;
   border-radius: 0px;
   background: transparent;
+  overflow-y: hidden;
 }
 
 .modal-backdrop.fade.in {
@@ -15,36 +16,42 @@ div#chrome_ext_slideview_images_modal_dlg
 .slide_view {
   position: absolute;
   z-index: 101;
+  height: 100%;
+  width: 100%;
 }
 
 .slide_navigation {
-  margin-bottom: 5px;
-  margin-left: 20px;
-  text-align: left;
+  margin-bottom: 10px;
+  height: 20px;
+}
+
+.slide_nav_close {
+  padding: 10px 10px 5px;
+  font-size: 1.3em;
+  text-decoration: underline;
+  color: red;
   cursor: pointer;
-  z-index: 101;
 }
 
 .slide_body {
-  float: left;
-  margin-top: 5px;
-  right: -70px;
+  left: 30px;
 }
 
 .slide_image {
-  position: relative;
-  width: 1000px;
-  height:560px;
-  overflow:auto;
+  margin-top: 20px;
 }
 
 .slide_viewsource {
-  display: none;
   position: absolute;
-  width: 1000px;
-  height: 560px;
-  color: yellow;
   z-index: 102;
+}
+
+.slide_viewsource a {
+  font-size: 13px;
+  color: #FFFFFF;
+  background-color: #505050;
+  padding: 1px;
+  text-decoration: none;
 }
 
 .slide_view_image {
@@ -54,35 +61,26 @@ div#chrome_ext_slideview_images_modal_dlg
 }
 
 .slide_image_title {
-  display: block;
-  margin: 0 auto;
+  margin-top: 20px;
   text-align: center;
-  margin-top: 10px;
   font-size: 2em;
   color: #FFD700;
-  z-index: 101;
 }
 
 .slide_thumbnail {
-  margin-top: 20px;
   float: right;
-  margin-right: 30px;
-  height: 560px;
-  overflow:auto;
-  z-index: 101;
-}
-
-.img-thumbnail-current {
-  background-color: red;
+  margin-right: 50px;
+  height: 80%;
+  overflow: auto;
 }
 
 ul.slide_ul {
-  padding-right: 10px;
+  margin-right: 10px;
   list-style:none;
 }
 
 ul.slide_ul li {
-  margin-bottom: 8px;
+  margin-top: 6px;
 }
 
 .img-thumbnail {
@@ -90,13 +88,11 @@ ul.slide_ul li {
 }
 
 .img-thumbnail:hover {
-  transform: scale(0.9);
+  transform: scale(0.95);
 }
 
-.slide_nav_close {
-  font-family: 'icomoon';
-  speak: none;
-  font-size: 1.3em;
-  text-decoration: underline;
-  color: red;
+.img-thumbnail-current {
+  border: 3px solid red;
+  background-color: transparent;
 }
+
