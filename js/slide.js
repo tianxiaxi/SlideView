@@ -70,7 +70,7 @@ function showImage(index) {
     }
   })
 
-  var tips = (parseInt(index) + 1) + '/' + countImage;
+  var tips = (parseInt(index) + 1) + ' / ' + countImage;
   $('.slide_count_tips').text(tips);
   adjustCss();
 
@@ -340,7 +340,7 @@ function insertSlideDomElement(imgList) {
   // slide_view/slide_body
   html += '<div class="slide_body">';
   html += '<div class="slide_count_tips">';
-  html += '<span>' + (parseInt(curIndex)+1) + '/' + imgList.length + '</span>';
+  html += '<span>' + (parseInt(curIndex)+1) + ' / ' + imgList.length + '</span>';
   html += '</div>';
   html += '<div class="slide_image">';
   html += '<img class="slide_view_image" alt="' +
